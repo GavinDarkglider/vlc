@@ -103,7 +103,29 @@ int avparser_OpenPacketizer( vlc_object_t *p_this )
     if( !p_ctx )
         return VLC_EGENERIC;
 
-    AVCodec * p_codec = avcodec_find_decoder( i_avcodec_id );
+    AVCodec * p_codec; // = avcodec_find_decoder( i_avcodec_id );
+    switch (i_avcodec_id)
+    {
+   	 case AV_CODEC_ID_H264: //h264
+    		p_codec = avcodec_find_decoder_by_name("h264_nvmpi");
+    		break;
+    	case AV_CODEC_ID_HEVC: //hevc
+    		p_codec = avcodec_find_decoder_by_name("hevc_nvmpi");
+    		break;
+    	case AV_CODEC_ID_VP9: //vp9
+    		p_codec = avcodec_find_decoder_by_name("vp9_nvmpi");
+    		break;
+    	case AV_CODEC_ID_MPEG4: //MPEG4
+    		p_codec = avcodec_find_decoder_by_name("mpeg4_nvmpi");
+    		break;
+    	case AV_CODEC_ID_MPEG2VIDEO: //MPEG2
+    		p_codec = avcodec_find_decoder_by_name("mpeg2_nvmpi");
+    		break;
+    	default: // everything else
+    		p_codec = avcodec_find_decoder(i_avcodec_id);
+    		break;
+    }
+    
     if( unlikely( !p_codec ) )
     {
         av_parser_close( p_ctx );

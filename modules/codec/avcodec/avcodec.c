@@ -280,7 +280,29 @@ AVCodecContext *ffmpeg_AllocContext( decoder_t *p_dec,
         free( psz_decoder );
     }
     if( !p_codec )
-        p_codec = avcodec_find_decoder( i_codec_id );
+        //p_codec = avcodec_find_decoder( i_codec_id );
+	switch (i_codec_id)
+	{
+		case AV_CODEC_ID_H264: //h264
+			p_codec = avcodec_find_decoder_by_name("h264_nvmpi");
+			break;
+		case AV_CODEC_ID_HEVC: //hevc
+			p_codec = avcodec_find_decoder_by_name("hevc_nvmpi");
+			break;
+		case AV_CODEC_ID_VP9: //vp9
+			p_codec = avcodec_find_decoder_by_name("vp9_nvmpi");
+			break;
+		case AV_CODEC_ID_MPEG4: //MPEG4
+			p_codec = avcodec_find_decoder_by_name("mpeg4_nvmpi");
+       			break;
+     		case AV_CODEC_ID_MPEG2VIDEO: //MPEG2
+       			p_codec = avcodec_find_decoder_by_name("mpeg2_nvmpi");
+       			break;
+     		default: // everything else
+      			p_codec = avcodec_find_decoder(i_codec_id);
+      			break;
+    }
+
     if( !p_codec )
     {
         msg_Dbg( p_dec, "codec not found (%s)", psz_namecodec );
